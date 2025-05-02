@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Tilt } from "react-tilt";
 import { projects } from "../Constants/constants";
 import { githubIcon } from "../assets";
+import { useState } from "react";
 
 export const staggerContainer = (staggerChildren, delayChildren) => {
 	return {
@@ -109,6 +110,7 @@ const ProjectCard = ({
   source_code_link,
   demo_link,
 }) => {
+  const [expanded, setExpanded] = useState(false);
   return (
       <Tilt
           options={{
@@ -116,7 +118,10 @@ const ProjectCard = ({
               scale: 1,
               speed: 450,
           }}
-          className="shadow-2xl p-5 rounded-lg sm:w-[300px] w-[100%]"
+          className="p-5 rounded-lg sm:w-[300px] w-[100%]"
+		  style={{
+			boxShadow: '5px 10px 20px rgba(0, 0, 0, 0.2)', // Customize top, bottom, left, right
+		  }}
       >
           <motion.div
               variants={fadeIn("up", "spring", index * 0.5, 0.75)}
@@ -142,10 +147,16 @@ const ProjectCard = ({
               </div>
 
               <div className="mt-3">
-                  <h3 className="text-white font-bold text-2xl">{name}</h3>
-                  <p className="mt-2 text-secondary text-[14px] leading-snug">
+                  <h3 className="text-white font-bold text-2xl line-clamp-1">{name}</h3>
+                  <p className={`mt-2 text-secondary text-[14px] leading-snug ${expanded ? "" : "line-clamp-3"}`}>
                       {description}
                   </p>
+
+				  {description.length > 100 && (
+					<button onClick={() => setExpanded(!expanded)} className="text-blue-400 text-sm mt-1 underline">
+						{expanded ? "See less" : "See more"}
+					</button>
+				  )}
               </div>
               <div className="mt-2 flex flex-wrap gap-1"></div>
               <div className="mt-3 flex justify-center items-center">
